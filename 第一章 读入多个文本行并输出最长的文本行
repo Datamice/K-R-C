@@ -1,0 +1,52 @@
+/* 读入一组文本行并把最长的文本行打印出来，有空可以用gets来改一下，可能比getchar好实现，gets会直接生成一个字符串，而 getchar要自己加到 char数组里结尾加'\0'来处理
+#define Maxline 1000
+
+int getline(char line[]);
+void copy(char to[],char from[]);
+
+int main()
+{
+    int len;
+    int max;
+    char line[Maxline];
+    char longest[Maxline];
+
+    max=0;
+
+
+    while((len=getline(line)) > 0)
+        if(len>max){
+            max=len;
+            copy(longest,line);
+        };
+
+
+    if(max>0)
+        printf("%s",longest);//longest前面是char数组，但由于处理过程在文本结尾加上'\0'变成一个字符串，可以用%s进行输出
+
+    return 0;
+}
+
+int getline(char s[])
+{
+    int c,i;
+
+    for(i=0;i<Maxline-1&&(c=getchar())!=EOF && c!='\n';++i)//每一行文本有三个临界，一是达到最长长度，二是输入'\n'表示结束文本，三是EOF标识表示用户端不再进入输出
+        s[i]=c;
+
+    if(c=='\n')//对于上面第二临界的情况把\n也算入文本行的一个长度
+    {
+        s[i]=c;
+        ++i;
+    }
+
+    s[i]='\0';//用\0表示字符串的结尾，字符串必备
+    return i;
+}
+
+void copy(char to[],char from[])
+{
+    int i=0;
+    while((to[i]=from[i])!='\0')//特别喜欢赋值后来判断，原因是循环退出条件刚好在一个新赋值的变量上
+        ++i;
+}
